@@ -1,6 +1,16 @@
 const $arenas = document.querySelector('.arenas');
-const $randomButton = document.querySelector('.button');
 
+const $formFight = document.querySelector('.control')
+const $fightButton = $formFight.querySelector('.button');
+
+
+const HIT = {
+   head: 30,
+   body: 25,
+   foot: 20,
+}
+
+const ATTACK = ['head', 'body', 'foot'];
 
 const player1 = {
    player: 1,
@@ -11,9 +21,9 @@ const player1 = {
    attack: function (name) {
       console.log(name + ' ' + 'Fight...')
    },
-   changeHP: changeHP,
-   elHP: elHP,
-   renderHP: renderHP
+   changeHP,
+   elHP,
+   renderHP
 };
 
 
@@ -26,9 +36,9 @@ const player2 = {
    attack: function (name) {
       console.log(name + ' ' + 'Fight...')
    },
-   changeHP: changeHP,
-   elHP: elHP,
-   renderHP: renderHP
+   changeHP,
+   elHP,
+   renderHP
 };
 
 
@@ -75,38 +85,45 @@ function playerWins(name) {
 }
 
 
-$randomButton.addEventListener('click', function () {
-   player1.changeHP();
-   player2.changeHP();
-   player1.renderHP();
-   player2.renderHP();
+// $randomButton.addEventListener('click', function () {
+// player1.changeHP();
+// player2.changeHP();
+// player1.renderHP();
+// player2.renderHP();
 
-   if (player1.hp === 0 || player2.hp === 0) {
-      $randomButton.disabled = true;
-   }
+// if (player1.hp === 0 || player2.hp === 0) {
+// $randomButton.disabled = true;
+// createReloadButton();
+// }
 
-   if (player1.hp === 0 && player1.hp < player2.hp) {
-      $arenas.appendChild(playerWins(player2.name))
-   }
-   else if (player2.hp === 0 && player2.hp < player1.hp) {
-      $arenas.appendChild(playerWins(player1.name))
-   }
-   else if (player2.hp === 0 && player2.hp === 0) {
-      $arenas.appendChild(playerWins())
-   }
+// if (player1.hp === 0 && player1.hp < player2.hp) {
+// $arenas.appendChild(playerWins(player2.name))
+// }
+// else if (player2.hp === 0 && player2.hp < player1.hp) {
+// $arenas.appendChild(playerWins(player1.name))
+// }
+// else if (player2.hp === 0 && player2.hp === 0) {
+// $arenas.appendChild(playerWins())
+// }
 
-})
+// })
 
 
 $arenas.appendChild(createPlayer(player1));
 $arenas.appendChild(createPlayer(player2));
 
+function getRandom(num) {
+   return Math.ceil(Math.random() * num);
+}
 
-function changeHP() {
-   this.hp -= Math.ceil(Math.random() * 20);
+
+
+function changeHP(value) {
+   this.hp -= value;
+
    if (this.hp <= 0) {
       this.hp = 0;
-      createReloadButton();
+
    }
    return this.hp;
 }
@@ -132,4 +149,63 @@ function createReloadButton() {
    $buttonRestart.addEventListener('click', function () { return window.location.reload() });
 }
 
+function enemyAttack() {
+   const hit = ATTACK[getRandom(3) - 1];
+   const defence = ATTACK[getRandom(3) - 1];
+   return {
+      hit,
+      value: getRandom(HIT[hit]),
+      defence,
+   }
 
+}
+
+
+
+$formFight.addEventListener('submit', function (e) {
+   e.preventDefault();
+
+   const enemy = enemyAttack();
+
+   const attack = {};
+   for (let item of $formFight) {
+      if (item.checked && item.name === 'hit') {
+         attack.hit = item.value;
+         attack.hit === enemy.defence ? attack.value = 0 : attack.value = getRandom(HIT[item.value]);
+      }
+      if (item.checked && item.name === 'defence') {
+         attack.defence = item.value;
+         attack.defence === enemy.hit ? enemy.value = 0 : enemy.value;
+      }
+      item.checked = false;
+   }
+   console.log('###:a', attack);
+   console.log('###:e', enemy);
+
+   player1.changeHP(enemy.value);
+   player2.changeHP(attack.value);
+
+   console.log(player1.hp);
+   console.log(player2.hp);
+
+   player1.renderHP();
+   player2.renderHP();
+
+
+   if (player1.hp === 0 || player2.hp === 0) {
+      $fightButton.disabled = true;
+      createReloadButton();
+   }
+
+   if (player1.hp === 0 && player1.hp < player2.hp) {
+      $arenas.appendChild(playerWins(player2.name))
+   }
+   else if (player2.hp === 0 && player2.hp < player1.hp) {
+      $arenas.appendChild(playerWins(player1.name))
+   }
+   else if (player2.hp === 0 && player2.hp === 0) {
+      $arenas.appendChild(playerWins())
+   }
+
+
+})
