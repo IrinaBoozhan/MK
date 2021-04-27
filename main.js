@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 const $arenas = document.querySelector('.arenas');
 const $formFight = document.querySelector('.control')
 const $fightButton = $formFight.querySelector('.button');
@@ -92,19 +93,41 @@ function createPlayer(playerObj) {
    const $name = createElement('div', 'name');
    const $character = createElement('div', 'character');
    const $img = createElement('img');
+=======
+import Player from './Player/index.js';
+import { generateLogs, restart } from './Games/index.js';
+import { getRandom } from './utils/index.js';
+import { HIT, ATTACK, LOGS } from './constants/index.js';
 
-   $player.appendChild($progressbar);
-   $progressbar.appendChild($life);
-   $progressbar.appendChild($name);
-   $player.appendChild($character);
-   $character.appendChild($img);
+const $arenas = document.querySelector('.arenas');
+const $formFight = document.querySelector('.control');
+const $chat = document.querySelector('.chat');
 
+const player1 = new Player({
+   player: 1,
+   name: 'Kitana',
+   hp: 100,
+   img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
+   rootSelector: 'arenas',
+
+});
+>>>>>>> Stashed changes
+
+
+<<<<<<< Updated upstream
    $life.style.width = `${playerObj.hp}` + '%';
    $name.innerText = playerObj.name;
    $img.src = playerObj.img;
+=======
+const player2 = new Player({
+   player: 2,
+   name: 'Sonya',
+   hp: 100,
+   img: 'http://reactmarathon-api.herokuapp.com/assets/sonya.gif',
+   rootSelector: 'arenas',
+});
+>>>>>>> Stashed changes
 
-   return $player;
-};
 
 
 function playerWins(name) {
@@ -267,7 +290,17 @@ $formFight.addEventListener('submit', function (e) {
    console.log(player1.hp);
    console.log(player2.hp);
 })
+<<<<<<< Updated upstream
+=======
+
+player1.createPlayer();
+player2.createPlayer();
+>>>>>>> Stashed changes
 
 
 restart();
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
